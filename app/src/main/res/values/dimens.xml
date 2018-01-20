@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- text size -->
+    <dimen name="text18">18sp</dimen>
+    <dimen name="text36">36sp</dimen>
+    <dimen name="text56">56sp</dimen>
+
+    <!-- margin size -->
+    <dimen name="spacing2">2dp</dimen>
+    <dimen name="spacing4">4dp</dimen>
+    <dimen name="spacing6">6dp</dimen>
+    <dimen name="spacing8">8dp</dimen>
+    <dimen name="spacing10">10dp</dimen>
+    <dimen name="spacing12">12dp</dimen>
+    <dimen name="spacing16">16dp</dimen>
+    <dimen name="spacing20">20dp</dimen>
+    <dimen name="spacing24">24dp</dimen>
+    <dimen name="spacing28">28dp</dimen>
+    <dimen name="spacing30">30dp</dimen>
+    <dimen name="spacing32">32dp</dimen>
+    <dimen name="spacing34">34dp</dimen>
+    <!-- dimen size -->
+
+    <dimen name="size30">30dp</dimen>
+    <dimen name="size36">36dp</dimen>
+    <dimen name="size48">48dp</dimen>}
+    <dimen name="size128">128dp</dimen>
+</resources>

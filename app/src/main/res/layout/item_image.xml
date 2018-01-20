@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:clickable="true"
+    android:layout_height="wrap_content"
+    android:paddingRight="@dimen/spacing10">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="150dp"
+        android:clickable="false"
+        android:layout_height="150dp">
+
+        <WebView
+            android:id="@+id/web_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:visibility="gone"
+            android:scrollbars="none" />
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="false"
+            app:srcCompat="@drawable/b7"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/gif_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing8"
+            android:layout_marginRight="@dimen/spacing8"
+            android:background="@drawable/rounded_white"
+            android:paddingLeft="@dimen/spacing8"
+            android:paddingRight="@dimen/spacing8"
+            android:text="GIF"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <art.trip.com.tripart.widget.LikeButton
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginBottom="@dimen/spacing8"
+            android:layout_marginLeft="@dimen/spacing8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+</android.support.constraint.ConstraintLayout>
