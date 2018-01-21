@@ -3,7 +3,9 @@ package art.trip.com.tripart.activity;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.audiofx.Visualizer;
 import android.os.Handler;
 import android.speech.RecognitionListener;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +16,7 @@ import android.widget.SeekBar;
 
 import art.trip.com.tripart.R;
 import art.trip.com.tripart.util.DesignUtil;
+import art.trip.com.tripart.widget.VisualizerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -27,10 +30,15 @@ public class DetailAudioActivity extends AppCompatActivity {
     @BindView(R.id.play_btn)
     Button playBtn;
 
+    @BindView(R.id.visualizer)
+    VisualizerView visualizerView;
+
     MediaPlayer m;
     Runnable runnable;
     Handler handler;
     private boolean statusPlay;
+
+    private Visualizer mVisualizer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +52,25 @@ public class DetailAudioActivity extends AppCompatActivity {
         statusPlay = true;
         try {
             m = new MediaPlayer();
-
+            m.setAudioStreamType(AudioManager.STREAM_MUSIC);
             AssetFileDescriptor descriptor = getAssets().openFd("disclosure.mp3");
             m.setDataSource(descriptor.getFileDescriptor(), descriptor.getStartOffset(), descriptor.getLength());
             descriptor.close();
+
+            mVisualizer = new Visualizer(m.getAudioSessionId());
+            mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]);
+            mVisualizer.setDataCaptureListener(new Visualizer.OnDataCaptureListener() {
+                @Override
+                public void onWaveFormDataCapture(Visualizer visualizer, byte[] waveform, int samplingRate) {
+                    DetailAudioActivity.this.visualizerView.updateVisualizer(waveform);
+                }
+
+                @Override
+                public void onFftDataCapture(Visualizer visualizer, byte[] fft, int samplingRate) {
+
+                }
+            }, Visualizer.getMaxCaptureRate() / 2, true, false);
+            mVisualizer.setEnabled(true);
             m.prepare();
 
             m.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -56,6 +79,7 @@ public class DetailAudioActivity extends AppCompatActivity {
                     seekBar.setMax(mp.getDuration());
                     playCycle();
                     mp.start();
+                    //mVisualizer.setEnabled(false);
                 }
             });
 
@@ -83,6 +107,8 @@ public class DetailAudioActivity extends AppCompatActivity {
             }
         });
 
+
+
     }
 
     public void playCycle() {
@@ -107,6 +133,8 @@ public class DetailAudioActivity extends AppCompatActivity {
         } else {
             playBtn.setBackgroundResource(R.drawable.ic_pause);
             m.start();
+            playCycle();
+
         }
         statusPlay = !statusPlay;
     }

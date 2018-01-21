@@ -1,25 +1,14 @@
 package art.trip.com.tripart.activity;
 
-import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SnapHelper;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.TextView;
-
-
-import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 
 import art.trip.com.tripart.R;
 import art.trip.com.tripart.adapter.ImageViewAdapter;
@@ -102,7 +91,6 @@ public class DetailImageActivity extends AppCompatActivity {
 
                 if (prevCenterPos != centerPos) {
                     prevCenterPos = centerPos;
-                    Log.e("pos", centerPos + "");
                     titleText.setText(Setting.imageList.get(centerPos).getTitle());
 
                 }
