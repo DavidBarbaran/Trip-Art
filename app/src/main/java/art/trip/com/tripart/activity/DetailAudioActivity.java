@@ -6,6 +6,7 @@ import android.graphics.PorterDuff;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.audiofx.Visualizer;
+import android.net.Uri;
 import android.os.Handler;
 import android.speech.RecognitionListener;
 import android.support.v7.app.AppCompatActivity;
@@ -53,9 +54,13 @@ public class DetailAudioActivity extends AppCompatActivity {
         try {
             m = new MediaPlayer();
             m.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            AssetFileDescriptor descriptor = getAssets().openFd("disclosure.mp3");
+            m.setDataSource("https://geo-samples.beatport.com/track/308fce84-7fa5-4c69-85d3-0c7f2405a3ee.LOFI.mp3");
+
+           // m.prepareAsync();
+          /*  AssetFileDescriptor descriptor = getAssets().openFd("disclosure.mp3");
             m.setDataSource(descriptor.getFileDescriptor(), descriptor.getStartOffset(), descriptor.getLength());
             descriptor.close();
+            */
 
             mVisualizer = new Visualizer(m.getAudioSessionId());
             mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]);
@@ -71,20 +76,33 @@ public class DetailAudioActivity extends AppCompatActivity {
                 }
             }, Visualizer.getMaxCaptureRate() / 2, true, false);
             mVisualizer.setEnabled(true);
-            m.prepare();
-
             m.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mp) {
                     seekBar.setMax(mp.getDuration());
-                    playCycle();
                     mp.start();
+                    playCycle();
                     //mVisualizer.setEnabled(false);
                 }
             });
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    m.prepareAsync();
+                }
+            }).start();
+
+
+            m.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
+                @Override
+                public void onBufferingUpdate(MediaPlayer mediaPlayer, int i) {
+                    seekBar.setSecondaryProgress(i);
+                }
+            });
+
 
         } catch (Exception e) {
-            Log.e("error audio", e.getMessage());
+            Log.e("error audio", e.getMessage() + "");
         }
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -106,9 +124,6 @@ public class DetailAudioActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-
     }
 
     public void playCycle() {

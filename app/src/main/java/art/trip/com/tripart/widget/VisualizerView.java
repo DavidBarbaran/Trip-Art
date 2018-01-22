@@ -4,9 +4,6 @@ package art.trip.com.tripart.widget;
  * Created by David on 21/01/2018.
  */
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -39,7 +36,7 @@ public class VisualizerView extends View {
 
     private void init() {
         mBytes = null;
-        mForePaint.setStrokeWidth(1f);
+        mForePaint.setStrokeWidth(2.5f);
         mForePaint.setAntiAlias(true);
         mForePaint.setColor(Color.rgb(255, 255, 255));
     }
@@ -70,5 +67,4 @@ public class VisualizerView extends View {
         }
         canvas.drawLines(mPoints, mForePaint);
     }
-
 }

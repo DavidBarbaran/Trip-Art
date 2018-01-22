@@ -9,21 +9,21 @@
 
     <art.trip.com.tripart.widget.SnappyRecyclerView
         android:id="@+id/image_recycler"
-        android:overScrollMode="never"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:overScrollMode="never"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/footer_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/gradient_black_bottom"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:paddingTop="20dp">
+        android:paddingTop="20dp"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <Button
             android:id="@+id/like_btn"
@@ -57,8 +57,8 @@
 
         <Button
             android:id="@+id/info_btn"
-            android:layout_width="@dimen/size30"
-            android:layout_height="@dimen/size30"
+            android:layout_width="@dimen/size36"
+            android:layout_height="@dimen/size36"
             android:layout_marginBottom="@dimen/spacing12"
             android:layout_marginRight="@dimen/spacing24"
             android:background="@drawable/ic_info"
@@ -67,11 +67,118 @@
 
     </android.support.constraint.ConstraintLayout>
 
+    <LinearLayout
+        android:id="@+id/info_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/black45"
+        android:clickable="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/spacing20"
+        android:paddingRight="@dimen/spacing20"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:paddingBottom="@dimen/spacing8"
+            android:layout_marginTop="@dimen/spacing56"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <art.trip.com.tripart.widget.FontText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top"
+                        android:text="@string/title"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text18"
+                        app:typeface="NunitoSans-Light.ttf" />
+
+                    <art.trip.com.tripart.widget.FontText
+                        android:id="@+id/title_info_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/spacing8"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text18"
+                        app:typeface="NunitoSans-Light.ttf" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <art.trip.com.tripart.widget.FontText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top"
+                        android:text="@string/author"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text18"
+                        app:typeface="NunitoSans-Light.ttf" />
+
+                    <art.trip.com.tripart.widget.FontText
+                        android:id="@+id/author_info_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/spacing8"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text18"
+                        app:typeface="NunitoSans-Light.ttf" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <art.trip.com.tripart.widget.FontText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top"
+                        android:text="@string/description"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text18"
+                        app:typeface="NunitoSans-Light.ttf" />
+
+                    <art.trip.com.tripart.widget.FontText
+                        android:id="@+id/description_info_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/spacing8"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text18"
+                        app:typeface="NunitoSans-Light.ttf" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+
     <android.support.constraint.ConstraintLayout
         android:id="@+id/header_view"
-        android:background="@drawable/gradient_black_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/gradient_black_top"
         android:paddingBottom="@dimen/spacing20">
 
         <Button
@@ -86,14 +193,13 @@
 
         <art.trip.com.tripart.widget.FontText
             android:id="@+id/title_text"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/spacing16"
             android:layout_marginRight="@dimen/spacing16"
             android:layout_marginTop="@dimen/spacing12"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="BingBang - Reset brain"
             android:textColor="@color/white"
             android:textSize="@dimen/text18"
             app:layout_constraintEnd_toEndOf="parent"
@@ -103,9 +209,6 @@
             app:typeface="NunitoSans-Light.ttf" />
 
     </android.support.constraint.ConstraintLayout>
-
-
-
 
 </android.support.constraint.ConstraintLayout>
 

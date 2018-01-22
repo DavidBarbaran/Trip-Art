@@ -20,6 +20,7 @@
     <dimen name="spacing30">30dp</dimen>
     <dimen name="spacing32">32dp</dimen>
     <dimen name="spacing34">34dp</dimen>
+    <dimen name="spacing56">56dp</dimen>
     <!-- dimen size -->
 
     <dimen name="size30">30dp</dimen>

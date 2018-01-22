@@ -49,8 +49,22 @@ public class DetailImageActivity extends AppCompatActivity {
     @BindView(R.id.image_recycler)
     RecyclerView imageRecycler;
 
+    @BindView(R.id.title_info_text)
+    TextView titleInfoText;
+
+    @BindView(R.id.author_info_text)
+    TextView authorInfoText;
+
+    @BindView(R.id.description_info_text)
+    TextView descriptionInfoText;
+
+    @BindView(R.id.info_view)
+    View infoView;
+
     private boolean statusIcon;
+    private int statusBack;
     int prevCenterPos;
+    int centerPos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,9 +72,11 @@ public class DetailImageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail_image);
         ButterKnife.bind(this);
         statusIcon = true;
+        statusBack = 1;
         DesignUtil.setDesignColor(this, R.color.black);
         Image model = (Image) getIntent().getSerializableExtra(Setting.IMAGE);
         titleText.setText(model.getTitle());
+
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         imageRecycler.setLayoutManager(linearLayoutManager);
         ImageViewAdapter imageViewAdapter = new ImageViewAdapter(Setting.imageList, this);
@@ -78,7 +94,6 @@ public class DetailImageActivity extends AppCompatActivity {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-
             }
 
             @Override
@@ -87,7 +102,7 @@ public class DetailImageActivity extends AppCompatActivity {
 
                 int center = imageRecycler.getWidth() / 2;
                 View centerView = imageRecycler.findChildViewUnder(center, imageRecycler.getTop());
-                int centerPos = imageRecycler.getChildAdapterPosition(centerView);
+                centerPos = imageRecycler.getChildAdapterPosition(centerView);
 
                 if (prevCenterPos != centerPos) {
                     prevCenterPos = centerPos;
@@ -107,17 +122,17 @@ public class DetailImageActivity extends AppCompatActivity {
 
     private void hideAndShowButton() {
         if (statusIcon) {
-            hideView(headerView, 1.0f, 0.0f);
-            hideView(footerView, 1.0f, 0.0f);
             statusIcon = false;
+            alphaAnimation(headerView, 1.0f, 0.0f, statusIcon);
+            alphaAnimation(footerView, 1.0f, 0.0f, statusIcon);
         } else {
-            hideView(headerView, 0.0f, 1.0f);
-            hideView(footerView, 0.0f, 1.0f);
             statusIcon = true;
+            alphaAnimation(headerView, 0.0f, 1.0f, statusIcon);
+            alphaAnimation(footerView, 0.0f, 1.0f, statusIcon);
         }
     }
 
-    private void hideView(final View view, float startValue, float endValue) {
+    private void alphaAnimation(final View view, float startValue, float endValue, final boolean visible) {
         Animation animation = new AlphaAnimation(startValue, endValue);
         animation.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -127,7 +142,7 @@ public class DetailImageActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                view.setVisibility(statusIcon ? View.VISIBLE : View.GONE);
+                view.setVisibility(visible ? View.VISIBLE : View.GONE);
             }
 
             @Override
@@ -137,5 +152,34 @@ public class DetailImageActivity extends AppCompatActivity {
         });
         animation.setDuration(300);
         view.startAnimation(animation);
+    }
+
+    @OnClick(R.id.info_btn)
+    public void actionInfoBtn() {
+        titleInfoText.setText(Setting.imageList.get(centerPos).getTitle());
+        authorInfoText.setText(Setting.imageList.get(centerPos).getAuthor());
+        descriptionInfoText.setText(Setting.imageList.get(centerPos).getDescription());
+        alphaAnimation(infoView, 0.0f, 1.0f, true);
+        statusBack = 2;
+        backBtn.setBackgroundResource(R.drawable.ic_cancel);
+
+        alphaAnimation(footerView, 1.0f, 0.0f, false);
+        alphaAnimation(titleText, 1.0f, 0.0f, false);
+    }
+
+    @Override
+    public void onBackPressed() {
+        switch (statusBack) {
+            case 1:
+                super.onBackPressed();
+                break;
+            case 2:
+                statusBack = 1;
+                alphaAnimation(infoView, 1.0f, 0.0f, false);
+                alphaAnimation(footerView, 0.0f, 1.0f, true);
+                alphaAnimation(titleText, 0.0f, 1.0f, true);
+                backBtn.setBackgroundResource(R.drawable.ic_back);
+                break;
+        }
     }
 }
