@@ -4,7 +4,9 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "art.trip.com.tripart"
-        minSdkVersion 16
+        minSdkVersion 17
+        renderscriptTargetApi 19
+        renderscriptSupportModeEnabled true
         targetSdkVersion 26
         versionCode 1
         versionName "b1.0"
@@ -40,4 +42,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation 'com.android.support:recyclerview-v7:26.1.0'
+    implementation 'com.github.rubensousa:gravitysnaphelper:1.5'
 }

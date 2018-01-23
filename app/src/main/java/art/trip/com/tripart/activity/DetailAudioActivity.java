@@ -1,21 +1,23 @@
 package art.trip.com.tripart.activity;
 
-import android.content.res.AssetFileDescriptor;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.audiofx.Visualizer;
-import android.net.Uri;
 import android.os.Handler;
-import android.speech.RecognitionListener;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 
+import com.bumptech.glide.Glide;
+
 import art.trip.com.tripart.R;
+import art.trip.com.tripart.config.Setting;
+import art.trip.com.tripart.model.Audio;
 import art.trip.com.tripart.util.DesignUtil;
 import art.trip.com.tripart.widget.VisualizerView;
 import butterknife.BindView;
@@ -34,6 +36,9 @@ public class DetailAudioActivity extends AppCompatActivity {
     @BindView(R.id.visualizer)
     VisualizerView visualizerView;
 
+    @BindView(R.id.track_image)
+    ImageView trackImage;
+
     MediaPlayer m;
     Runnable runnable;
     Handler handler;
@@ -49,12 +54,14 @@ public class DetailAudioActivity extends AppCompatActivity {
         DesignUtil.setTransparentStatusBar(this);
         seekBar.getProgressDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
         seekBar.getThumb().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
+        Audio audio = (Audio) getIntent().getSerializableExtra(Setting.AUDIO);
+        Glide.with(this).load(audio.getImage()).into(trackImage);
         handler = new Handler();
         statusPlay = true;
         try {
             m = new MediaPlayer();
             m.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            m.setDataSource("https://geo-samples.beatport.com/track/308fce84-7fa5-4c69-85d3-0c7f2405a3ee.LOFI.mp3");
+            m.setDataSource(audio.getTrack());
 
            // m.prepareAsync();
           /*  AssetFileDescriptor descriptor = getAssets().openFd("disclosure.mp3");

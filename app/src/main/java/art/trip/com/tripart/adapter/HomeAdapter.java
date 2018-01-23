@@ -3,11 +3,16 @@ package art.trip.com.tripart.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.github.rubensousa.gravitysnaphelper.GravitySnapHelper;
 
 import java.util.List;
 
@@ -40,6 +45,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder>{
         holder.itemRecycler.getLayoutManager().scrollToPosition(0);
         holder.itemRecycler.scrollToPosition(0);
         holder.titleText.setText(list.get(position).getTitle());
+        SnapHelper snapHelperStart = new GravitySnapHelper(Gravity.START);
+        snapHelperStart.attachToRecyclerView(holder.itemRecycler);
     }
 
     @Override

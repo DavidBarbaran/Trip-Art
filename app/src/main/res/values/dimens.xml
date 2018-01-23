@@ -3,6 +3,7 @@
 
     <!-- text size -->
     <dimen name="text18">18sp</dimen>
+    <dimen name="text20">20sp</dimen>
     <dimen name="text36">36sp</dimen>
     <dimen name="text56">56sp</dimen>
 
@@ -25,6 +26,7 @@
 
     <dimen name="size30">30dp</dimen>
     <dimen name="size36">36dp</dimen>
+    <dimen name="size32">32dp</dimen>
     <dimen name="size48">48dp</dimen>}
     <dimen name="size128">128dp</dimen>
 </resources>

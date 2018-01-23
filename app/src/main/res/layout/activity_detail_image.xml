@@ -22,13 +22,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/gradient_black_bottom"
-        android:paddingTop="20dp"
+        android:paddingTop="@dimen/spacing28"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <Button
             android:id="@+id/like_btn"
-            android:layout_width="@dimen/size30"
-            android:layout_height="@dimen/size30"
+            android:layout_width="@dimen/size32"
+            android:layout_height="@dimen/size32"
             android:layout_marginBottom="@dimen/spacing12"
             android:layout_marginLeft="@dimen/spacing16"
             android:background="@drawable/ic_like"
@@ -37,8 +37,8 @@
 
         <Button
             android:id="@+id/download_btn"
-            android:layout_width="@dimen/size30"
-            android:layout_height="@dimen/size30"
+            android:layout_width="@dimen/size32"
+            android:layout_height="@dimen/size32"
             android:layout_marginBottom="@dimen/spacing12"
             android:layout_marginRight="@dimen/spacing16"
             android:background="@drawable/ic_download"
@@ -47,8 +47,8 @@
 
         <Button
             android:id="@+id/share_btn"
-            android:layout_width="@dimen/size30"
-            android:layout_height="@dimen/size30"
+            android:layout_width="@dimen/size32"
+            android:layout_height="@dimen/size32"
             android:layout_marginBottom="@dimen/spacing12"
             android:layout_marginRight="@dimen/spacing24"
             android:background="@drawable/ic_share"
@@ -57,8 +57,8 @@
 
         <Button
             android:id="@+id/info_btn"
-            android:layout_width="@dimen/size36"
-            android:layout_height="@dimen/size36"
+            android:layout_width="@dimen/size32"
+            android:layout_height="@dimen/size32"
             android:layout_marginBottom="@dimen/spacing12"
             android:layout_marginRight="@dimen/spacing24"
             android:background="@drawable/ic_info"
@@ -67,17 +67,17 @@
 
     </android.support.constraint.ConstraintLayout>
 
-    <LinearLayout
+
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/info_view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/black45"
-        android:clickable="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        android:alpha="0.8"
         android:gravity="center"
+        android:clickable="true"
         android:visibility="gone"
         android:orientation="vertical"
-        android:paddingLeft="@dimen/spacing20"
-        android:paddingRight="@dimen/spacing20"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -94,21 +94,23 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/spacing20"
+                android:paddingRight="@dimen/spacing20">
 
                 <art.trip.com.tripart.widget.FontText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/title"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/text18"
-                    app:typeface="NunitoSans-Light.ttf" />
+                    android:textSize="@dimen/text20"
+                    app:typeface="NunitoSans-Regular.ttf" />
 
                 <art.trip.com.tripart.widget.FontText
                     android:id="@+id/title_info_text"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/spacing8"
+                    android:layout_marginTop="@dimen/spacing2"
                     android:textColor="@color/white"
                     android:textSize="@dimen/text18"
                     app:typeface="NunitoSans-Light.ttf" />
@@ -116,16 +118,17 @@
                 <art.trip.com.tripart.widget.FontText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing8"
                     android:text="@string/author"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/text18"
-                    app:typeface="NunitoSans-Light.ttf" />
+                    android:textSize="@dimen/text20"
+                    app:typeface="NunitoSans-Regular.ttf" />
 
                 <art.trip.com.tripart.widget.FontText
                     android:id="@+id/author_info_text"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/spacing8"
+                    android:layout_marginTop="@dimen/spacing2"
                     android:textColor="@color/white"
                     android:textSize="@dimen/text18"
                     app:typeface="NunitoSans-Light.ttf" />
@@ -133,30 +136,31 @@
                 <art.trip.com.tripart.widget.FontText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing8"
                     android:text="@string/description"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/text18"
-                    app:typeface="NunitoSans-Light.ttf" />
+                    android:textSize="@dimen/text20"
+                    app:typeface="NunitoSans-Regular.ttf" />
 
                 <art.trip.com.tripart.widget.FontText
                     android:id="@+id/description_info_text"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/spacing8"
+                    android:layout_marginTop="@dimen/spacing2"
                     android:textColor="@color/white"
                     android:textSize="@dimen/text18"
                     app:typeface="NunitoSans-Light.ttf" />
 
             </LinearLayout>
         </ScrollView>
-    </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/header_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/gradient_black_top"
-        android:paddingBottom="@dimen/spacing20">
+        android:paddingBottom="@dimen/spacing28">
 
         <Button
             android:id="@+id/back_btn"

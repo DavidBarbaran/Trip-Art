@@ -2,8 +2,8 @@ package art.trip.com.tripart.config;
 
 import java.util.List;
 
+import art.trip.com.tripart.model.Audio;
 import art.trip.com.tripart.model.Image;
-import art.trip.com.tripart.model.Sound;
 
 /**
  * Created by David on 14/01/2018.
@@ -18,4 +18,7 @@ public class Setting {
 
     public static List<Image> imageList;
     public static final String IMAGE = "image";
+
+    public static List<Audio> audioList;
+    public static final String AUDIO = "audio";
 }

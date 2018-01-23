@@ -226,8 +226,9 @@ public class DetailImageActivity extends AppCompatActivity {
         authorInfoText.setText(Setting.imageList.get(centerPos).getAuthor());
         descriptionInfoText.setText(Setting.imageList.get(centerPos).getDescription());
         alphaAnimation(infoView, 0.0f, 1.0f, true);
-        statusBack = 2;
+
         backBtn.setBackgroundResource(R.drawable.ic_cancel);
+        statusBack = 2;
 
         alphaAnimation(footerView, 1.0f, 0.0f, false);
         alphaAnimation(titleText, 1.0f, 0.0f, false);

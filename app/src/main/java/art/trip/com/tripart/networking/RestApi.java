@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import art.trip.com.tripart.config.Setting;
+import art.trip.com.tripart.model.Audio;
 import art.trip.com.tripart.model.Image;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
@@ -29,9 +30,9 @@ public interface RestApi {
             .client(OK_HTTP_CLIENT)
             .build();
 
-
-
     @GET("/image.json")
-    Call<List<Image>> getData();
+    Call<List<Image>> getImage();
 
+    @GET("/audio.json")
+    Call<List<Audio>> getAudio();
 }

@@ -9,13 +9,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 import art.trip.com.tripart.R;
 import art.trip.com.tripart.activity.DetailAudioActivity;
-import art.trip.com.tripart.activity.DetailImageActivity;
-import art.trip.com.tripart.model.Image;
-import art.trip.com.tripart.model.Sound;
+import art.trip.com.tripart.config.Setting;
+import art.trip.com.tripart.model.Audio;
 
 /**
  * Created by David on 04/12/2017.
@@ -23,10 +24,10 @@ import art.trip.com.tripart.model.Sound;
 
 public class SoundAdapter  extends RecyclerView.Adapter<SoundAdapter.SoundHolder>{
 
-    List<Sound> list;
+    List<Audio> list;
     Context context;
 
-    public SoundAdapter(List<Sound> list, Context context) {
+    public SoundAdapter(List<Audio> list, Context context) {
         this.list = list;
         this.context = context;
     }
@@ -39,14 +40,8 @@ public class SoundAdapter  extends RecyclerView.Adapter<SoundAdapter.SoundHolder
 
     @Override
     public void onBindViewHolder(SoundHolder holder, int position) {
-        holder.image.setImageResource(list.get(position).getImage());
+        Glide.with(context).load(list.get(position).getImage()).into(holder.image);
         holder.titleText.setText(list.get(position).getTitle());
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                context.startActivity(new Intent(context, DetailAudioActivity.class));
-            }
-        });
     }
 
     @Override
@@ -64,7 +59,14 @@ public class SoundAdapter  extends RecyclerView.Adapter<SoundAdapter.SoundHolder
 
             image = itemView.findViewById(R.id.sound_image);
             titleText = itemView.findViewById(R.id.title_sound);
-
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(context, DetailAudioActivity.class);
+                    intent.putExtra(Setting.AUDIO, list.get(getAdapterPosition()));
+                    context.startActivity(intent);
+                }
+            });
         }
     }
 }
