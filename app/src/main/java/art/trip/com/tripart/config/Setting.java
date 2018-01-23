@@ -14,6 +14,8 @@ public class Setting {
     public static final String BASE_URL = "https://trip-art-14f19.firebaseio.com";
     public static final int TIMEOUT = 10;
 
+    public static final int PERMISSIONS_MULTIPLE_REQUEST = 303;
+
     public static List<Image> imageList;
     public static final String IMAGE = "image";
 }

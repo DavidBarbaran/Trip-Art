@@ -1,5 +1,16 @@
 package art.trip.com.tripart.activity;
 
+import android.Manifest;
+import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +20,10 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import art.trip.com.tripart.R;
 import art.trip.com.tripart.adapter.ImageViewAdapter;
@@ -65,6 +80,8 @@ public class DetailImageActivity extends AppCompatActivity {
     private int statusBack;
     int prevCenterPos;
     int centerPos;
+    private long lastDownload = -1L;
+    private DownloadManager mgr = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,12 +129,61 @@ public class DetailImageActivity extends AppCompatActivity {
             }
         });
 
+        mgr = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+        registerReceiver(onComplete,
+                new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+        registerReceiver(onNotificationClick,
+                new IntentFilter(DownloadManager.ACTION_NOTIFICATION_CLICKED));
+
 
     }
 
     @OnClick(R.id.back_btn)
     public void actionBack() {
         onBackPressed();
+    }
+
+    @OnClick(R.id.download_btn)
+    public void actionDownload() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            permissionDialog();
+        } else {
+
+            Environment
+                    .getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                    .mkdirs();
+
+            lastDownload =
+                    mgr.enqueue(new DownloadManager.Request(Uri.parse(Setting.imageList.get(centerPos).getPath()))
+                            .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI |
+                                    DownloadManager.Request.NETWORK_MOBILE)
+                            .setAllowedOverRoaming(false)
+                            .setTitle("Demo")
+                            .setDescription("Something useful. No, really.")
+                            .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,
+                                    Setting.imageList.get(centerPos).getTitle() + (Setting.imageList.get(centerPos).getPath().endsWith(".gif") ? ".gif" : ".png")));
+        }
+    }
+
+    private void permissionDialog() {
+        List<String> permitsList = new ArrayList<>();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+            permitsList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permitsList.size() > 0) {
+            String[] permissionArray = new String[permitsList.size()];
+            permissionArray = permitsList.toArray(permissionArray);
+
+            ActivityCompat.requestPermissions(this, permissionArray, Setting.PERMISSIONS_MULTIPLE_REQUEST);
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            actionDownload();
+        }
     }
 
     private void hideAndShowButton() {
@@ -182,4 +248,16 @@ public class DetailImageActivity extends AppCompatActivity {
                 break;
         }
     }
+
+    BroadcastReceiver onComplete = new BroadcastReceiver() {
+        public void onReceive(Context ctxt, Intent intent) {
+            Toast.makeText(ctxt, "Descarga completa", Toast.LENGTH_LONG).show();
+        }
+    };
+
+    BroadcastReceiver onNotificationClick = new BroadcastReceiver() {
+        public void onReceive(Context ctxt, Intent intent) {
+            Toast.makeText(ctxt, "Ummmm...hi!", Toast.LENGTH_LONG).show();
+        }
+    };
 }
