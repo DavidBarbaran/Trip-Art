@@ -134,8 +134,8 @@ public class DetailAudioActivity extends AppCompatActivity {
     }
 
     public void playCycle() {
-        seekBar.setProgress(m.getCurrentPosition());
         if (m.isPlaying()) {
+            seekBar.setProgress(m.getCurrentPosition());
             runnable = new Runnable() {
                 @Override
                 public void run() {
