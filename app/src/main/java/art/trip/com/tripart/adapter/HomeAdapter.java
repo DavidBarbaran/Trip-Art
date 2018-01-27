@@ -42,11 +42,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder>{
     public void onBindViewHolder(HomeHolder holder, int position) {
         holder.itemRecycler.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
         holder.itemRecycler.setAdapter(list.get(position).getAdapter());
-        holder.itemRecycler.getLayoutManager().scrollToPosition(0);
-        holder.itemRecycler.scrollToPosition(0);
         holder.titleText.setText(list.get(position).getTitle());
-        SnapHelper snapHelperStart = new GravitySnapHelper(Gravity.START);
-        snapHelperStart.attachToRecyclerView(holder.itemRecycler);
     }
 
     @Override

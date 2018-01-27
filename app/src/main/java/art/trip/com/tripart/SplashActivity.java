@@ -17,6 +17,7 @@ import java.util.List;
 import art.trip.com.tripart.config.Setting;
 import art.trip.com.tripart.model.Audio;
 import art.trip.com.tripart.model.Image;
+import art.trip.com.tripart.model.Video;
 import art.trip.com.tripart.networking.RestApi;
 import art.trip.com.tripart.util.DesignUtil;
 import butterknife.BindView;
@@ -37,6 +38,7 @@ public class SplashActivity extends AppCompatActivity {
     RestApi restApi = RestApi.RETROFIT.create(RestApi.class);
     private boolean statusImage;
     private boolean statusAudio;
+    private boolean statusVideo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,13 +48,14 @@ public class SplashActivity extends AppCompatActivity {
         DesignUtil.setTransparentStatusBar(this);
         statusImage = false;
         statusAudio = false;
+        statusVideo = false;
 
         restApi.getImage().enqueue(new Callback<List<Image>>() {
             @Override
             public void onResponse(Call<List<Image>> call, Response<List<Image>> response) {
                 Setting.imageList = response.body();
                 Collections.reverse(Setting.imageList);
-                if (statusAudio) {
+                if (statusAudio && statusVideo) {
                     loadView.hide();
                     continueBtn.setVisibility(View.VISIBLE);
                     continueBtn.startAnimation(AnimationUtils.loadAnimation(SplashActivity.this, R.anim.slide_up));
@@ -73,7 +76,7 @@ public class SplashActivity extends AppCompatActivity {
                 Log.e("rsponse", response.body().toString());
                 Setting.audioList = response.body();
                 Collections.reverse(Setting.audioList);
-                if (statusImage) {
+                if (statusImage && statusVideo) {
                     loadView.hide();
                     continueBtn.setVisibility(View.VISIBLE);
                     continueBtn.startAnimation(AnimationUtils.loadAnimation(SplashActivity.this, R.anim.slide_up));
@@ -87,11 +90,30 @@ public class SplashActivity extends AppCompatActivity {
                 Log.e("FAILURE", t.toString());
             }
         });
+
+        restApi.getVideo().enqueue(new Callback<List<Video>>() {
+            @Override
+            public void onResponse(Call<List<Video>> call, Response<List<Video>> response) {
+                Setting.videoList = response.body();
+                Collections.reverse(Setting.videoList);
+                if (statusImage && statusAudio) {
+                    loadView.hide();
+                    continueBtn.setVisibility(View.VISIBLE);
+                    continueBtn.startAnimation(AnimationUtils.loadAnimation(SplashActivity.this, R.anim.slide_up));
+                } else {
+                    statusVideo = true;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Video>> call, Throwable t) {
+
+            }
+        });
     }
 
     @OnClick(R.id.continue_btn)
     public void continueBtn() {
-
         startActivity(new Intent(SplashActivity.this, HomeActivity.class));
         finish();
     }

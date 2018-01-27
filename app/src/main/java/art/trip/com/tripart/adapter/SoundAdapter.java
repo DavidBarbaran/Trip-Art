@@ -22,7 +22,7 @@ import art.trip.com.tripart.model.Audio;
  * Created by David on 04/12/2017.
  */
 
-public class SoundAdapter  extends RecyclerView.Adapter<SoundAdapter.SoundHolder>{
+public class SoundAdapter extends RecyclerView.Adapter<SoundAdapter.SoundHolder>{
 
     List<Audio> list;
     Context context;

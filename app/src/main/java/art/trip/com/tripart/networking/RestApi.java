@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 import art.trip.com.tripart.config.Setting;
 import art.trip.com.tripart.model.Audio;
 import art.trip.com.tripart.model.Image;
+import art.trip.com.tripart.model.Video;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -35,4 +36,7 @@ public interface RestApi {
 
     @GET("/audio.json")
     Call<List<Audio>> getAudio();
+
+    @GET("/video.json")
+    Call<List<Video>> getVideo();
 }

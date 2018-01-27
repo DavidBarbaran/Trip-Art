@@ -4,6 +4,7 @@ import java.util.List;
 
 import art.trip.com.tripart.model.Audio;
 import art.trip.com.tripart.model.Image;
+import art.trip.com.tripart.model.Video;
 
 /**
  * Created by David on 14/01/2018.
@@ -21,4 +22,7 @@ public class Setting {
 
     public static List<Audio> audioList;
     public static final String AUDIO = "audio";
+
+    public static List<Video> videoList;
+    public static final String VIDEO = "video";
 }

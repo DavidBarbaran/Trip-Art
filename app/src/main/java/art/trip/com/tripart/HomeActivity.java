@@ -12,6 +12,7 @@ import java.util.List;
 import art.trip.com.tripart.adapter.HomeAdapter;
 import art.trip.com.tripart.adapter.ImageAdapter;
 import art.trip.com.tripart.adapter.SoundAdapter;
+import art.trip.com.tripart.adapter.VideoAdapter;
 import art.trip.com.tripart.config.Setting;
 import art.trip.com.tripart.model.Home;
 import butterknife.BindView;
@@ -36,11 +37,9 @@ public class HomeActivity extends AppCompatActivity {
     private List<Home> getData(){
         List<Home> list = new ArrayList<>();
 
-
         list.add(new Home("Imagenes", new ImageAdapter(Setting.imageList,this)));
-        //Log.e("rsponse",Setting.audioList.size() + "");
         list.add(new Home("Audio", new SoundAdapter(Setting.audioList,this)));
-
+        list.add(new Home("Video", new VideoAdapter(Setting.videoList, this)));
         return list;
     }
 }
