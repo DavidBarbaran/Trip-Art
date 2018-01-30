@@ -17,6 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <android.support.constraint.ConstraintLayout
         android:id="@+id/footer_view"
         android:layout_width="match_parent"
@@ -72,12 +73,12 @@
         android:id="@+id/info_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/black"
         android:alpha="0.8"
-        android:gravity="center"
+        android:background="@color/black"
         android:clickable="true"
-        android:visibility="gone"
+        android:gravity="center"
         android:orientation="vertical"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -190,6 +191,4 @@
             app:typeface="NunitoSans-Light.ttf" />
 
     </android.support.constraint.ConstraintLayout>
-
 </android.support.constraint.ConstraintLayout>
-

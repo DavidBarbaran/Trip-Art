@@ -7,20 +7,38 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.UiThread;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Transition;
+import android.transition.TransitionListenerAdapter;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,17 +100,24 @@ public class DetailImageActivity extends AppCompatActivity {
     int centerPos;
     private long lastDownload = -1L;
     private DownloadManager mgr = null;
+    Image model;
+    boolean isFinishAnimation;
+    boolean isFinishLoad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_image);
+        isFinishAnimation = false;
+        isFinishLoad = false;
         ButterKnife.bind(this);
+
         statusIcon = true;
         statusBack = 1;
         DesignUtil.setDesignColor(this, R.color.black);
-        Image model = (Image) getIntent().getSerializableExtra(Setting.IMAGE);
+        model = (Image) getIntent().getSerializableExtra(Setting.IMAGE);
         titleText.setText(model.getTitle());
+
 
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         imageRecycler.setLayoutManager(linearLayoutManager);
@@ -103,6 +128,7 @@ public class DetailImageActivity extends AppCompatActivity {
                 hideAndShowButton();
             }
         });
+
         imageRecycler.setAdapter(imageViewAdapter);
         linearLayoutManager.scrollToPositionWithOffset(model.getPosition(), 0);
         prevCenterPos = model.getPosition() - 1;
@@ -128,14 +154,14 @@ public class DetailImageActivity extends AppCompatActivity {
                 }
             }
         });
-
+        initServiceDownload();
+    }
+    private void initServiceDownload() {
         mgr = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
         registerReceiver(onComplete,
                 new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
         registerReceiver(onNotificationClick,
                 new IntentFilter(DownloadManager.ACTION_NOTIFICATION_CLICKED));
-
-
     }
 
     @OnClick(R.id.back_btn)
@@ -176,7 +202,6 @@ public class DetailImageActivity extends AppCompatActivity {
 
             ActivityCompat.requestPermissions(this, permissionArray, Setting.PERMISSIONS_MULTIPLE_REQUEST);
         }
-
     }
 
     @Override
@@ -261,4 +286,5 @@ public class DetailImageActivity extends AppCompatActivity {
             Toast.makeText(ctxt, "Ummmm...hi!", Toast.LENGTH_LONG).show();
         }
     };
+
 }

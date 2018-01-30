@@ -1,17 +1,26 @@
 package art.trip.com.tripart.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 
 import java.util.List;
 
@@ -23,7 +32,7 @@ import art.trip.com.tripart.model.Image;
  * Created by David on 19/01/2018.
  */
 
-public class ImageViewAdapter extends RecyclerView.Adapter<ImageViewAdapter.ImageViewHolder>{
+public class ImageViewAdapter extends RecyclerView.Adapter<ImageViewAdapter.ImageViewHolder> {
 
     List<Image> list;
     Context context;
@@ -46,13 +55,29 @@ public class ImageViewAdapter extends RecyclerView.Adapter<ImageViewAdapter.Imag
     }
 
     @Override
-    public void onBindViewHolder(ImageViewHolder holder, int position) {
-        holder.gifWebView.setVisibility(list.get(position).getPath().endsWith(".gif") ? View.VISIBLE : View.GONE);
-        holder.photoView.setVisibility(list.get(position).getPath().endsWith(".gif") ? View.GONE : View.VISIBLE);
-        if (!list.get(position).getPath().endsWith(".gif")){
-            Glide.with(context).load(list.get(position).getPath()).into(holder.photoView);
-        }
-        else{
+    public void onBindViewHolder(final ImageViewHolder holder, final int position) {
+        boolean isGif = list.get(position).getPath().endsWith(".gif");
+        //holder.gifWebView.setVisibility(isGif ? View.VISIBLE : View.GONE);
+        //holder.photoView.setVisibility(isGif ? View.GONE : View.VISIBLE);
+        if (!isGif) {
+            holder.gifWebView.setVisibility(View.GONE);
+            Glide.with(context).load(list.get(position).getPath()).apply(new RequestOptions()
+                    .placeholder(R.drawable.ic_place_image).error(R.drawable.ic_place_image).dontTransform())
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                            holder.photoView.setPadding(0, 0, 0, 0);
+                            return false;
+                        }
+                    })
+                    .into(holder.photoView);
+        } else {
+            Glide.with(context).load(R.drawable.ic_place_image).apply(new RequestOptions().dontTransform()).into(holder.photoView);
             holder.gifWebView.loadDataWithBaseURL("", "<html style=\"height=100%\">\n" +
                     "<body bgcolor=\"#212121\" style=\"height: 100%;\n" +
                     "            margin: 0;\n" +
@@ -70,6 +95,24 @@ public class ImageViewAdapter extends RecyclerView.Adapter<ImageViewAdapter.Imag
                     "  </div>\n" +
                     "  </body>\n" +
                     "</html>", "text/html", "utf-8", "");
+            holder.gifWebView.setWebViewClient(new WebViewClient(){
+                @Override
+                public void onPageFinished(WebView view, String url) {
+                    super.onPageFinished(view, url);
+
+                    Log.e("load view","yes");
+                }
+            });
+
+            holder.gifWebView.setWebChromeClient(new WebChromeClient() {
+                public void onProgressChanged(WebView view, int progress) {
+                    Log.e("pos",position + " - " + progress);
+                    if (progress==100){
+                        holder.photoView.setVisibility(View.GONE);
+                        holder.gifWebView.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
         }
     }
 
@@ -97,7 +140,7 @@ public class ImageViewAdapter extends RecyclerView.Adapter<ImageViewAdapter.Imag
             gifWebView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
-                    if (motionEvent.getAction()==MotionEvent.ACTION_UP){
+                    if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
                         onItemClick.onItemClick(getAdapterPosition());
                     }
                     return false;

@@ -1,9 +1,11 @@
 package art.trip.com.tripart.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,6 +15,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestOptions;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -42,21 +49,36 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageHolder>
     }
 
     @Override
-    public void onBindViewHolder(ImageHolder holder, int position) {
-        holder.webView.setVisibility(list.get(position).getPath().endsWith(".gif") ? View.VISIBLE : View.GONE);
+    public void onBindViewHolder(final ImageHolder holder, final int position) {
         holder.gifText.setVisibility(list.get(position).getPath().endsWith(".gif") ? View.VISIBLE : View.GONE);
-        holder.image.setVisibility(list.get(position).getPath().endsWith(".gif") ? View.GONE : View.VISIBLE);
+        int size150 = (int) context.getResources().getDimension(R.dimen.size150);
         list.get(position).setPosition(position);
-        if (!list.get(position).getPath().endsWith(".gif")){
-            Glide.with(context).load(list.get(position).getPath()).into(holder.image);
-        }
-        else{
-            holder.webView.loadDataWithBaseURL("", "<html>\n" + "<center>" +
-                    "<body style=\"margin: 0; padding: 0\" bgcolor=\"white\">\n" +
-                    "<div class=\"center-cropped\" style=\"background-image: url('" + list.get(position).getPath() + "'); width: 100%; padding-top: 100%; background-position: center center; background-repeat: no-repeat;background-size: cover;\">&nbsp;</div>"
-                    +
-                    "</body>", "text/html", "utf-8", "");
-        }
+        //.override(size150, size150)
+        Glide.with(context).asBitmap()
+                .load(list.get(position).getPath()).apply(new RequestOptions()
+                .placeholder(R.drawable.place).error(R.drawable.place).override(size150, size150))
+                .thumbnail(0.2f).transition(BitmapTransitionOptions.withCrossFade(600))
+                .into(holder.image);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //startSharedActivity(holder.image, list.get(position));
+                Intent intent = new Intent(context, DetailImageActivity.class);
+                intent.putExtra(Setting.IMAGE, list.get(position));
+                context.startActivity(intent);
+            }
+        });
+    }
+
+    public void startSharedActivity(View view, Image item) {
+        ActivityOptionsCompat options =
+                ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        (Activity) context, view, Setting.TRANSITION);
+
+        Intent intent = new Intent(context, DetailImageActivity.class);
+        intent.putExtra(Setting.IMAGE, item);
+        ActivityCompat.startActivity(context, intent, options.toBundle());
     }
 
     @Override
@@ -67,37 +89,14 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageHolder>
     public class ImageHolder extends RecyclerView.ViewHolder {
 
         View view;
-        public WebView webView;
         public ImageView image;
         TextView gifText;
 
         public ImageHolder(View itemView) {
             super(itemView);
             view = itemView;
-            webView = itemView.findViewById(R.id.web_view);
             image = itemView.findViewById(R.id.image);
             gifText = itemView.findViewById(R.id.gif_text);
-            webView.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    if (event.getAction() == MotionEvent.ACTION_UP) {
-                        Intent intent = new Intent(context, DetailImageActivity.class);
-                        intent.putExtra(Setting.IMAGE, list.get(getAdapterPosition()));
-                        context.startActivity(intent);
-                    }
-                    return (event.getAction() == MotionEvent.ACTION_MOVE);
-
-                }
-            });
-           itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(context, DetailImageActivity.class);
-                    intent.putExtra(Setting.IMAGE, list.get(getAdapterPosition()));
-                    context.startActivity(intent);
-                }
-            });
-
         }
     }
 }

@@ -30,4 +30,5 @@
     <dimen name="size32">32dp</dimen>
     <dimen name="size48">48dp</dimen>}
     <dimen name="size128">128dp</dimen>
+    <dimen name="size150">150dp</dimen>
 </resources>

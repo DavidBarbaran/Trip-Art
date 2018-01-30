@@ -7,25 +7,22 @@
     android:paddingRight="@dimen/spacing10">
 
     <android.support.constraint.ConstraintLayout
-        android:layout_width="150dp"
+        android:layout_width="@dimen/size150"
         android:clickable="false"
-        android:layout_height="150dp">
-
-        <WebView
-            android:id="@+id/web_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:overScrollMode="never"
-            android:visibility="gone"
-            android:scrollbars="none" />
+        android:layout_height="@dimen/size150">
 
         <ImageView
             android:id="@+id/image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:adjustViewBounds="true"
             android:clickable="false"
-            app:srcCompat="@drawable/b7"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/place" />
 
         <TextView
             android:id="@+id/gif_text"
@@ -50,4 +47,6 @@
             app:layout_constraintStart_toStartOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
+
+
 </android.support.constraint.ConstraintLayout>
