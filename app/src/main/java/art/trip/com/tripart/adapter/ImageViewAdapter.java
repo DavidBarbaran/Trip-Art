@@ -57,12 +57,12 @@ public class ImageViewAdapter extends RecyclerView.Adapter<ImageViewAdapter.Imag
     @Override
     public void onBindViewHolder(final ImageViewHolder holder, final int position) {
         boolean isGif = list.get(position).getPath().endsWith(".gif");
-        //holder.gifWebView.setVisibility(isGif ? View.VISIBLE : View.GONE);
-        //holder.photoView.setVisibility(isGif ? View.GONE : View.VISIBLE);
+        holder.gifWebView.setVisibility(isGif ? View.VISIBLE : View.GONE);
+        holder.photoView.setVisibility(isGif ? View.GONE : View.VISIBLE);
         if (!isGif) {
             holder.gifWebView.setVisibility(View.GONE);
             Glide.with(context).load(list.get(position).getPath()).apply(new RequestOptions()
-                    .placeholder(R.drawable.ic_place_image).error(R.drawable.ic_place_image).dontTransform())
+                    .error(R.drawable.ic_place_image).dontTransform())
                     .listener(new RequestListener<Drawable>() {
                         @Override
                         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
@@ -71,13 +71,12 @@ public class ImageViewAdapter extends RecyclerView.Adapter<ImageViewAdapter.Imag
 
                         @Override
                         public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                            holder.photoView.setPadding(0, 0, 0, 0);
+                            holder.placeImage.setVisibility(View.GONE);
                             return false;
                         }
                     })
                     .into(holder.photoView);
         } else {
-            Glide.with(context).load(R.drawable.ic_place_image).apply(new RequestOptions().dontTransform()).into(holder.photoView);
             holder.gifWebView.loadDataWithBaseURL("", "<html style=\"height=100%\">\n" +
                     "<body bgcolor=\"#212121\" style=\"height: 100%;\n" +
                     "            margin: 0;\n" +
@@ -95,20 +94,20 @@ public class ImageViewAdapter extends RecyclerView.Adapter<ImageViewAdapter.Imag
                     "  </div>\n" +
                     "  </body>\n" +
                     "</html>", "text/html", "utf-8", "");
-            holder.gifWebView.setWebViewClient(new WebViewClient(){
+            holder.gifWebView.setWebViewClient(new WebViewClient() {
                 @Override
                 public void onPageFinished(WebView view, String url) {
                     super.onPageFinished(view, url);
 
-                    Log.e("load view","yes");
+                    Log.e("load view", "yes");
                 }
             });
 
             holder.gifWebView.setWebChromeClient(new WebChromeClient() {
                 public void onProgressChanged(WebView view, int progress) {
-                    Log.e("pos",position + " - " + progress);
-                    if (progress==100){
-                        holder.photoView.setVisibility(View.GONE);
+                    Log.e("pos", position + " - " + progress);
+                    if (progress == 100) {
+                        holder.placeImage.setVisibility(View.GONE);
                         holder.gifWebView.setVisibility(View.VISIBLE);
                     }
                 }
@@ -125,12 +124,14 @@ public class ImageViewAdapter extends RecyclerView.Adapter<ImageViewAdapter.Imag
 
         public ImageView photoView;
         public WebView gifWebView;
+        public ImageView placeImage;
 
         public ImageViewHolder(View itemView) {
             super(itemView);
 
             photoView = itemView.findViewById(R.id.photo_view);
             gifWebView = itemView.findViewById(R.id.web_view);
+            placeImage = itemView.findViewById(R.id.place_image);
             photoView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

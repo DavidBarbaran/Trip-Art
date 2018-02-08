@@ -1,4 +1,4 @@
-package art.trip.com.tripart;
+package art.trip.com.tripart.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import art.trip.com.tripart.R;
 import art.trip.com.tripart.adapter.HomeAdapter;
 import art.trip.com.tripart.adapter.ImageAdapter;
 import art.trip.com.tripart.adapter.SoundAdapter;
@@ -27,19 +28,16 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
         ButterKnife.bind(this);
-
         homeRecycler.setLayoutManager(new LinearLayoutManager(this));
-        homeRecycler.setAdapter(new HomeAdapter(getData(),this));
+        homeRecycler.setAdapter(new HomeAdapter(getData(), this));
     }
 
-    private List<Home> getData(){
+    private List<Home> getData() {
         List<Home> list = new ArrayList<>();
-
-        list.add(new Home("Imagenes", new ImageAdapter(Setting.imageList,this)));
-        list.add(new Home("Audio", new SoundAdapter(Setting.audioList,this)));
-        list.add(new Home("Video", new VideoAdapter(Setting.videoList, this)));
+        list.add(new Home("Imagenes", new ImageAdapter(Setting.imageList, this), ImageActivity.class));
+        list.add(new Home("Audio", new SoundAdapter(Setting.audioList, this), ImageActivity.class));
+        list.add(new Home("Video", new VideoAdapter(Setting.videoList, this), ImageActivity.class));
         return list;
     }
 }

@@ -1,5 +1,9 @@
 package art.trip.com.tripart.networking;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -12,6 +16,7 @@ import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 /**
  * Created by David on 14/01/2018.
@@ -31,10 +36,16 @@ public interface RestApi {
             .client(OK_HTTP_CLIENT)
             .build();
 
-    @GET("/image.json")
-    Call<List<Image>> getImage();
+    @GET("/image.json?")
+    Call<JsonObject> getImage(@Query("orderBy") String order, @Query("limitToLast") int lengthLast);
 
-    @GET("/audio.json")
+    @GET("/audio.json?")
+    Call<JsonObject> getAudio(@Query("orderBy") String order, @Query("limitToLast") int lengthLast);
+
+    @GET("/image.json?")
+    Call<JsonObject> getImageById(@Query("orderBy") String order, @Query("equalTo") int lengthLast);
+
+    @GET("/audio.json?")
     Call<List<Audio>> getAudio();
 
     @GET("/video.json")

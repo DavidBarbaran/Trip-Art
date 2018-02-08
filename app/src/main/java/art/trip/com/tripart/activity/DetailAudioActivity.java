@@ -2,18 +2,26 @@ package art.trip.com.tripart.activity;
 
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.audiofx.Visualizer;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 
 import art.trip.com.tripart.R;
 import art.trip.com.tripart.config.Setting;
@@ -25,7 +33,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class DetailAudioActivity extends AppCompatActivity {
-
 
     @BindView(R.id.audio_seekbar)
     SeekBar seekBar;
@@ -39,11 +46,13 @@ public class DetailAudioActivity extends AppCompatActivity {
     @BindView(R.id.track_image)
     ImageView trackImage;
 
+    @BindView(R.id.place_audio_image)
+    ImageView placeAudioImage;
+
     MediaPlayer m;
     Runnable runnable;
     Handler handler;
     private boolean statusPlay;
-
     private Visualizer mVisualizer;
 
     @Override
@@ -55,7 +64,18 @@ public class DetailAudioActivity extends AppCompatActivity {
         seekBar.getProgressDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
         seekBar.getThumb().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
         Audio audio = (Audio) getIntent().getSerializableExtra(Setting.AUDIO);
-        Glide.with(this).load(audio.getImage()).into(trackImage);
+        Glide.with(this).load(audio.getImage()).listener(new RequestListener<Drawable>() {
+            @Override
+            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                placeAudioImage.setVisibility(View.GONE);
+                return false;
+            }
+        }).into(trackImage);
         handler = new Handler();
         statusPlay = true;
         try {
@@ -63,7 +83,7 @@ public class DetailAudioActivity extends AppCompatActivity {
             m.setAudioStreamType(AudioManager.STREAM_MUSIC);
             m.setDataSource(audio.getTrack());
 
-           // m.prepareAsync();
+            // m.prepareAsync();
           /*  AssetFileDescriptor descriptor = getAssets().openFd("disclosure.mp3");
             m.setDataSource(descriptor.getFileDescriptor(), descriptor.getStartOffset(), descriptor.getLength());
             descriptor.close();
@@ -99,14 +119,12 @@ public class DetailAudioActivity extends AppCompatActivity {
                 }
             }).start();
 
-
             m.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
                 @Override
                 public void onBufferingUpdate(MediaPlayer mediaPlayer, int i) {
                     seekBar.setSecondaryProgress(i);
                 }
             });
-
 
         } catch (Exception e) {
             Log.e("error audio", e.getMessage() + "");

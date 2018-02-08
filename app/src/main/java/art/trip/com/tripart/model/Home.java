@@ -10,10 +10,12 @@ public class Home {
 
     private String title;
     private RecyclerView.Adapter adapter;
+    private Class<?> activity;
 
-    public Home(String title, RecyclerView.Adapter adapter) {
+    public Home(String title, RecyclerView.Adapter adapter, Class<?> activity) {
         this.title = title;
         this.adapter = adapter;
+        this.activity = activity;
     }
 
     public String getTitle() {
@@ -30,5 +32,13 @@ public class Home {
 
     public void setAdapter(RecyclerView.Adapter adapter) {
         this.adapter = adapter;
+    }
+
+    public Class<?> getActivity() {
+        return activity;
+    }
+
+    public void setActivity(Class<?> activity) {
+        this.activity = activity;
     }
 }

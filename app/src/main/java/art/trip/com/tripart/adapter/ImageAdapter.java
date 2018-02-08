@@ -7,19 +7,14 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -36,16 +31,36 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageHolder>
 
     List<Image> list;
     Context context;
+    private int type;
+    public static final int TYPE_1 = 1;
+    public static final int TYPE_2 = 2;
 
     public ImageAdapter(List<Image> list, Context context) {
         this.list = list;
         this.context = context;
+        type = TYPE_1;
     }
+
+    public ImageAdapter(List<Image> list, Context context, int type) {
+        this.list = list;
+        this.context = context;
+        this.type = type;
+    }
+
 
     @Override
     public ImageHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ImageAdapter.ImageHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_image, parent, false));
+        switch (type) {
+            case 1:
+                return new ImageAdapter.ImageHolder(LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_image, parent, false));
+            case 2:
+                return new ImageAdapter.ImageHolder(LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_all_image, parent, false));
+            default:
+                return new ImageAdapter.ImageHolder(LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_image, parent, false));
+        }
     }
 
     @Override
@@ -56,7 +71,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageHolder>
         //.override(size150, size150)
         Glide.with(context).asBitmap()
                 .load(list.get(position).getPath()).apply(new RequestOptions()
-                .placeholder(R.drawable.place).error(R.drawable.place).override(size150, size150))
+                .placeholder(R.drawable.place_image).error(R.drawable.place_image).override(size150, size150))
                 .thumbnail(0.2f).transition(BitmapTransitionOptions.withCrossFade(600))
                 .into(holder.image);
 
@@ -79,6 +94,10 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageHolder>
         Intent intent = new Intent(context, DetailImageActivity.class);
         intent.putExtra(Setting.IMAGE, item);
         ActivityCompat.startActivity(context, intent, options.toBundle());
+    }
+
+    public void setList(List<Image> list) {
+        this.list = list;
     }
 
     @Override

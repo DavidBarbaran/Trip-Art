@@ -27,4 +27,6 @@ public class Setting {
     public static final String VIDEO = "video";
 
     public static final String TRANSITION = "transition_image";
+    public static final String ID = "\"id\"";
+    public static final int LENGTH_20 = 20;
 }

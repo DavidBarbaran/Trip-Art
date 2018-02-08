@@ -104,6 +104,7 @@ public class DetailImageActivity extends AppCompatActivity {
     boolean isFinishAnimation;
     boolean isFinishLoad;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -150,6 +151,7 @@ public class DetailImageActivity extends AppCompatActivity {
                 if (prevCenterPos != centerPos) {
                     prevCenterPos = centerPos;
                     titleText.setText(Setting.imageList.get(centerPos).getTitle());
+
 
                 }
             }
