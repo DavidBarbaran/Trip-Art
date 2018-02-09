@@ -169,7 +169,7 @@
             android:layout_height="@dimen/size30"
             android:layout_marginLeft="@dimen/spacing16"
             android:layout_marginTop="@dimen/spacing12"
-            android:background="@drawable/ic_back"
+            android:background="@drawable/ic_back_white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

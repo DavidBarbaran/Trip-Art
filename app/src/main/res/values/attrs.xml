@@ -22,4 +22,12 @@
         <attr name="drawableTopCompat" />
         <attr name="drawableBottomCompat" />
     </declare-styleable>
+
+    <declare-styleable name="FontEditText">
+        <attr name="typeface" />
+        <attr name="drawableLeftCompat" />
+        <attr name="drawableRightCompat" />
+        <attr name="drawableTopCompat" />
+        <attr name="drawableBottomCompat" />
+    </declare-styleable>
 </resources>

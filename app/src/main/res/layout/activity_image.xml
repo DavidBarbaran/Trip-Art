@@ -3,29 +3,99 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/black"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context="art.trip.com.tripart.activity.ImageActivity">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/image_recycler"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-           app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_height="0dp"
-            android:overScrollMode="never" />
 
-        <com.wang.avi.AVLoadingIndicatorView
-            android:id="@+id/load"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:visibility="gone"
-            app:indicatorColor="@color/colorPrimary"
-            app:indicatorName="BallPulseIndicator" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/image_recycler"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:overScrollMode="never"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/load"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:indicatorColor="@color/colorPrimary"
+        app:indicatorName="BallPulseIndicator"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/search_linear"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/black45"
+        android:clickable="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/search_cardview"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_marginLeft="@dimen/spacing8"
+            android:layout_marginRight="@dimen/spacing8"
+            android:layout_marginTop="@dimen/spacing30"
+            android:background="#ffffff"
+
+            app:cardCornerRadius="3dp"
+            app:cardElevation="@dimen/spacing12">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Button
+                    android:id="@+id/back_btn"
+                    android:layout_width="@dimen/size30"
+                    android:layout_height="@dimen/size30"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/spacing12"
+                    android:background="@drawable/ic_back_black" />
+
+                <art.trip.com.tripart.widget.FontEditText
+                    android:id="@+id/search_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/spacing12"
+                    android:layout_marginRight="@dimen/spacing12"
+                    android:background="@color/white"
+                    android:hint="@string/search"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text20"
+                    app:typeface="NunitoSans-Regular.ttf" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/search_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing16"
+        android:layout_marginEnd="@dimen/spacing16"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_search" />
+
 </android.support.constraint.ConstraintLayout>

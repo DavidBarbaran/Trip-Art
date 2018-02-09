@@ -4,4 +4,5 @@
     <string name="title">Título:</string>
     <string name="author">Autor:</string>
     <string name="description">Descripción:</string>
+    <string name="search">Buscar</string>
 </resources>

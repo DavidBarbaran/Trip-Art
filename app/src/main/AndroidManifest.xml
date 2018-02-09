@@ -35,7 +35,7 @@
             android:name=".activity.DetailVideoActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:screenOrientation="landscape" />
-        <activity android:name=".activity.ImageActivity"></activity>
+        <activity android:name=".activity.ImageActivity" />
     </application>
 
 </manifest>
