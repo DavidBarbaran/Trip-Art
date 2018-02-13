@@ -8,10 +8,11 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
@@ -75,10 +76,10 @@ public class ImageActivity extends AppCompatActivity {
     LinearLayout emptyView;
 
     private boolean loading = true;
-    int pastVisibleItems, visibleItemCount, totalItemCount;
-    RestApi restApi = RestApi.RETROFIT.create(RestApi.class);
-    ImageAdapter imageAdapter;
-    int value = 0;
+    private int pastVisibleItems, visibleItemCount, totalItemCount;
+    private RestApi restApi = RestApi.RETROFIT.create(RestApi.class);
+    private ImageAdapter imageAdapter;
+    private int value = 0;
     private boolean isShowKeyboard;
     private StaggeredGridLayoutManager layoutManager;
 
@@ -93,8 +94,7 @@ public class ImageActivity extends AppCompatActivity {
     private void initView() {
         isShowKeyboard = false;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            Window w = getWindow();
-            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
         initRecycler();
         initSearchEdit();
@@ -155,6 +155,19 @@ public class ImageActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        final String blockCharacterSet = "\"\\";
+        InputFilter filter = new InputFilter() {
+
+            @Override
+            public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+                if (source != null && blockCharacterSet.contains(("" + source))) {
+                    return "";
+                }
+                return null;
+            }
+        };
+        searchEditText.setFilters(new InputFilter[] { filter });
     }
 
     private void getImageById() {
@@ -253,29 +266,13 @@ public class ImageActivity extends AppCompatActivity {
         isShowKeyboard = true;
         searchBtn.hide();
         searchLinear.setVisibility(View.VISIBLE);
+        searchEditText.requestFocus();
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-
-        TranslateAnimation animation1 = new TranslateAnimation(1500.0f, 0.0f, 0.0f, 0.0f); // new TranslateAnimation(xFrom,xTo, yFrom,yTo)
-        animation1.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                searchEditText.requestFocus();
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        animation1.setDuration(400);
-        animation1.setFillAfter(true);
-        searchCardView.startAnimation(animation1);
+        imm.showSoftInput(searchEditText, InputMethodManager.SHOW_IMPLICIT);
+        TranslateAnimation animation = new TranslateAnimation(1500.0f, 0.0f, 0.0f, 0.0f); // new TranslateAnimation(xFrom,xTo, yFrom,yTo)
+        animation.setDuration(Setting.DURATION_ANIMATION);
+        animation.setFillAfter(true);
+        searchCardView.startAnimation(animation);
     }
 
     @OnClick(R.id.back_btn)
