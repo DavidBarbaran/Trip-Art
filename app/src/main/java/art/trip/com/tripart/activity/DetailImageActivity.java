@@ -85,6 +85,7 @@ public class DetailImageActivity extends AppCompatActivity {
     Image model;
     boolean isFinishAnimation;
     boolean isFinishLoad;
+    List<Image> list;
 
 
     @Override
@@ -101,10 +102,20 @@ public class DetailImageActivity extends AppCompatActivity {
         model = (Image) getIntent().getSerializableExtra(Setting.IMAGE);
         titleText.setText(model.getTitle());
 
+        switch (getIntent().getExtras().getInt(Setting.LIST_IMAGE)){
+            case 1:
+                list = Setting.imageList;
+                break;
+            case 2:
+                list = Setting.imageListFilter;
+                break;
+            default:
+                break;
+        }
 
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         imageRecycler.setLayoutManager(linearLayoutManager);
-        ImageViewAdapter imageViewAdapter = new ImageViewAdapter(Setting.imageList, this);
+        ImageViewAdapter imageViewAdapter = new ImageViewAdapter(list, this);
         imageViewAdapter.setOnItemClick(new OnItemClick() {
             @Override
             public void onItemClick(int position) {
@@ -132,7 +143,7 @@ public class DetailImageActivity extends AppCompatActivity {
 
                 if (prevCenterPos != centerPos) {
                     prevCenterPos = centerPos;
-                    titleText.setText(Setting.imageList.get(centerPos).getTitle());
+                    titleText.setText(list.get(centerPos).getTitle());
 
 
                 }
@@ -164,14 +175,14 @@ public class DetailImageActivity extends AppCompatActivity {
                     .mkdirs();
 
             lastDownload =
-                    mgr.enqueue(new DownloadManager.Request(Uri.parse(Setting.imageList.get(centerPos).getPath()))
+                    mgr.enqueue(new DownloadManager.Request(Uri.parse(list.get(centerPos).getPath()))
                             .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI |
                                     DownloadManager.Request.NETWORK_MOBILE)
                             .setAllowedOverRoaming(false)
                             .setTitle("Demo")
                             .setDescription("Something useful. No, really.")
                             .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,
-                                    Setting.imageList.get(centerPos).getTitle() + (Setting.imageList.get(centerPos).getPath().endsWith(".gif") ? ".gif" : ".png")));
+                                    list.get(centerPos).getTitle() + (list.get(centerPos).getPath().endsWith(".gif") ? ".gif" : ".png")));
         }
     }
 
@@ -231,9 +242,9 @@ public class DetailImageActivity extends AppCompatActivity {
 
     @OnClick(R.id.info_btn)
     public void actionInfoBtn() {
-        titleInfoText.setText(Setting.imageList.get(centerPos).getTitle());
-        authorInfoText.setText(Setting.imageList.get(centerPos).getAuthor());
-        descriptionInfoText.setText(Setting.imageList.get(centerPos).getDescription());
+        titleInfoText.setText(list.get(centerPos).getTitle());
+        authorInfoText.setText(list.get(centerPos).getAuthor());
+        descriptionInfoText.setText(list.get(centerPos).getDescription());
         alphaAnimation(infoView, 0.0f, 1.0f, true);
 
         backBtn.setBackgroundResource(R.drawable.ic_cancel);

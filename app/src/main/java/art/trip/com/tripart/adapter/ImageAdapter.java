@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import art.trip.com.tripart.R;
@@ -64,7 +66,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageHolder>
     }
 
     @Override
-    public void onBindViewHolder(final ImageHolder holder, final int position) {
+    public void onBindViewHolder(ImageHolder holder, final int position) {
         holder.gifText.setVisibility(list.get(position).getPath().endsWith(".gif") ? View.VISIBLE : View.GONE);
         int size150 = (int) context.getResources().getDimension(R.dimen.size150);
         list.get(position).setPosition(position);
@@ -74,30 +76,22 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageHolder>
                 .placeholder(R.drawable.place_image).error(R.drawable.place_image).override(size150, size150))
                 .thumbnail(0.2f).transition(BitmapTransitionOptions.withCrossFade(600))
                 .into(holder.image);
-
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //startSharedActivity(holder.image, list.get(position));
                 Intent intent = new Intent(context, DetailImageActivity.class);
                 intent.putExtra(Setting.IMAGE, list.get(position));
+                intent.putExtra(Setting.LIST_IMAGE, type);
+                Log.e("extra", list.get(position).getTitle());
                 context.startActivity(intent);
             }
         });
     }
 
-    public void startSharedActivity(View view, Image item) {
-        ActivityOptionsCompat options =
-                ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        (Activity) context, view, Setting.TRANSITION);
-
-        Intent intent = new Intent(context, DetailImageActivity.class);
-        intent.putExtra(Setting.IMAGE, item);
-        ActivityCompat.startActivity(context, intent, options.toBundle());
-    }
-
     public void setList(List<Image> list) {
-        this.list = list;
+       this.list.clear();
+        this.list.addAll(list);
     }
 
     @Override
@@ -116,6 +110,9 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageHolder>
             view = itemView;
             image = itemView.findViewById(R.id.image);
             gifText = itemView.findViewById(R.id.gif_text);
+
+
+
         }
     }
 }

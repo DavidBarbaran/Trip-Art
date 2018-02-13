@@ -15,11 +15,14 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -28,6 +31,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.net.UnknownHostException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -49,8 +53,11 @@ public class ImageActivity extends AppCompatActivity {
     @BindView(R.id.image_recycler)
     RecyclerView imageRecycler;
 
-    @BindView(R.id.load)
+    @BindView(R.id.load_more_items)
     AVLoadingIndicatorView loadView;
+
+    @BindView(R.id.load_search)
+    AVLoadingIndicatorView loadSearch;
 
     @BindView(R.id.search_linear)
     View searchLinear;
@@ -62,7 +69,10 @@ public class ImageActivity extends AppCompatActivity {
     FloatingActionButton searchBtn;
 
     @BindView(R.id.search_cardview)
-    CardView searchCardview;
+    CardView searchCardView;
+
+    @BindView(R.id.empty_view)
+    LinearLayout emptyView;
 
     private boolean loading = true;
     int pastVisibleItems, visibleItemCount, totalItemCount;
@@ -70,6 +80,7 @@ public class ImageActivity extends AppCompatActivity {
     ImageAdapter imageAdapter;
     int value = 0;
     private boolean isShowKeyboard;
+    private StaggeredGridLayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,10 +96,16 @@ public class ImageActivity extends AppCompatActivity {
             Window w = getWindow();
             w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
-        final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        initRecycler();
+        initSearchEdit();
+    }
+
+    private void initRecycler() {
+        layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         imageRecycler.setLayoutManager(layoutManager);
-        imageAdapter = new ImageAdapter(Setting.imageList, this, ImageAdapter.TYPE_2);
+        imageAdapter = new ImageAdapter(Setting.imageListFilter, this, ImageAdapter.TYPE_2);
         imageRecycler.setAdapter(imageAdapter);
+
         imageRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -104,27 +121,44 @@ public class ImageActivity extends AppCompatActivity {
                     if ((visibleItemCount + pastVisibleItems) >= totalItemCount) {
                         loadView.show();
                         loading = false;
-                        getAudio();
-                        Log.e("ID", "" + Setting.imageList.get(Setting.imageList.size() - 1).getId());
-                        Log.e("tag", "LOAD NEXT ITEM");
+                        getImageById();
                     }
-                }
-            }
-        });
-        searchEditText.setKeyImeChangeListener(new FontEditText.KeyImeChange() {
-            @Override
-            public void onKeyIme(int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                   isShowKeyboard = false;
-
                 }
             }
         });
     }
 
-    private void getAudio() {
-        int index = Setting.imageList.get(Setting.imageList.size() - 1).getId();
-        Log.e("id", index + "");
+    private void initSearchEdit() {
+        searchEditText.setKeyImeChangeListener(new FontEditText.KeyImeChange() {
+            @Override
+            public void onKeyIme(int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    if (isShowKeyboard) {
+                        hideSearchBar();
+                    }
+                }
+            }
+        });
+
+        searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_SEARCH) {
+                    loading = false;
+                    loadSearch.setVisibility(View.VISIBLE);
+                    imageRecycler.setVisibility(View.GONE);
+                    emptyView.setVisibility(View.GONE);
+                    backActionSearch();
+                    getImageByName();
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    private void getImageById() {
+        int index = Setting.imageListFilter.get(Setting.imageListFilter.size() - 1).getId();
         restApi.getImageById(Setting.ID, index - 1).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -132,31 +166,63 @@ public class ImageActivity extends AppCompatActivity {
                     List<Image> list = jsonToList(response.body().toString(),
                             new TypeToken<List<Image>>() {
                             }.getType());
-                    Log.e("SIZE list", "" + response.body().toString());
-                    Setting.imageList.addAll(list);
-                    Log.e("SIZE", "" + Setting.imageList.size());
+                    Setting.imageListFilter.addAll(list);
                     value++;
                     if (value == 10) {
                         value = 0;
                         loadView.hide();
                         loading = true;
-                        imageAdapter.setList(Setting.imageList);
                         imageAdapter.notifyDataSetChanged();
                     } else {
-                        getAudio();
+                        getImageById();
                     }
                 } else {
                     value = 0;
                     loadView.hide();
                     loading = true;
-                    imageAdapter.setList(Setting.imageList);
                     imageAdapter.notifyDataSetChanged();
                 }
             }
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                if (t instanceof UnknownHostException) {
 
+                }
+            }
+        });
+    }
+
+    private void getImageByName() {
+        String filter = searchEditText.getText().toString();
+        String startAt = "\"" + filter + "\"";
+        String endAt = "\"" + filter + "\\uf8ff" + "\"";
+        restApi.getImageByName(Setting.TITLE, startAt, endAt, Setting.LENGTH_20).enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                Log.e("response", " " + response.body());
+                if (response.isSuccessful()) {
+                    List<Image> list = jsonToList(response.body().toString(), new TypeToken<List<Image>>() {
+                    }.getType());
+                    Setting.imageListFilter.clear();
+                    Setting.imageListFilter = list;
+                    imageAdapter.setList(Setting.imageListFilter);
+                    imageAdapter.notifyDataSetChanged();
+                    imageRecycler.setVisibility(View.VISIBLE);
+                    loadSearch.setVisibility(View.GONE);
+                } else {
+                    Log.e("error", "no sucefull" + response.body().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.e("error", t + "");
+                Log.e("error 2", call + "");
+                if (t instanceof JsonSyntaxException) {
+                    emptyView.setVisibility(View.VISIBLE);
+                    loadSearch.setVisibility(View.GONE);
+                }
             }
         });
     }
@@ -190,7 +256,7 @@ public class ImageActivity extends AppCompatActivity {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
 
-        TranslateAnimation animation1 = new TranslateAnimation(1000.0f, 0.0f, 0.0f, 0.0f); // new TranslateAnimation(xFrom,xTo, yFrom,yTo)
+        TranslateAnimation animation1 = new TranslateAnimation(1500.0f, 0.0f, 0.0f, 0.0f); // new TranslateAnimation(xFrom,xTo, yFrom,yTo)
         animation1.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -207,17 +273,32 @@ public class ImageActivity extends AppCompatActivity {
 
             }
         });
-        animation1.setDuration(600);
+        animation1.setDuration(400);
         animation1.setFillAfter(true);
-        searchCardview.startAnimation(animation1);//your_view for mine is imageView
-
+        searchCardView.startAnimation(animation1);
     }
 
     @OnClick(R.id.back_btn)
     public void backActionSearch() {
+        hideKeyboard();
+        hideSearchBar();
+    }
 
-        TranslateAnimation animation1 = new TranslateAnimation(0.0f, 1000.0f, 0.0f, 0.0f);
-        animation1.setDuration(400);
+    @OnClick(R.id.search_edittext)
+    public void actionSearchEditText() {
+        isShowKeyboard = true;
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(
+                Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
+    }
+
+    private void hideSearchBar() {
+        isShowKeyboard = false;
+        TranslateAnimation animation1 = new TranslateAnimation(0.0f, 1500.0f, 0.0f, 0.0f);
+        animation1.setDuration(Setting.DURATION_ANIMATION);
         animation1.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -235,32 +316,18 @@ public class ImageActivity extends AppCompatActivity {
             }
         });
         animation1.setFillAfter(true);
-        searchCardview.startAnimation(animation1);
-
-        InputMethodManager imm = (InputMethodManager) getSystemService(
-                Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
+        searchCardView.startAnimation(animation1);
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Log.e("hide","keyboard " + isShowKeyboard);
-                if (isShowKeyboard){
-                    try {
-                        Thread.sleep(400);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                try {
+                    Thread.sleep(Setting.DURATION_ANIMATION);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
                 searchBtn.show();
                 isShowKeyboard = false;
             }
         }).start();
-
-    }
-
-    @OnClick(R.id.search_edittext)
-    public void actionSearchEditText(){
-        isShowKeyboard  =true;
-        Log.e("click","editext search");
     }
 }

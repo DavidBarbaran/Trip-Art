@@ -18,7 +18,9 @@ public class Setting {
     public static final int PERMISSIONS_MULTIPLE_REQUEST = 303;
 
     public static List<Image> imageList;
+    public static List<Image> imageListFilter;
     public static final String IMAGE = "image";
+    public static final String LIST_IMAGE = "list_image";
 
     public static List<Audio> audioList;
     public static final String AUDIO = "audio";
@@ -28,5 +30,8 @@ public class Setting {
 
     public static final String TRANSITION = "transition_image";
     public static final String ID = "\"id\"";
+    public static final String TITLE = "\"title\"";
     public static final int LENGTH_20 = 20;
+
+    public static final int DURATION_ANIMATION = 400;
 }

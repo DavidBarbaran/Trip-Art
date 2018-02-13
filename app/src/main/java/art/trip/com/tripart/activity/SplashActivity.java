@@ -38,6 +38,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static art.trip.com.tripart.config.Setting.imageListFilter;
+
 public class SplashActivity extends AppCompatActivity {
 
     @BindView(R.id.load_view)
@@ -68,7 +70,11 @@ public class SplashActivity extends AppCompatActivity {
                     Setting.imageList = jsonToList(response.body().toString(),
                             new TypeToken<List<Image>>() {
                             }.getType());
+                    imageListFilter = jsonToList(response.body().toString(),
+                            new TypeToken<List<Image>>() {
+                            }.getType());
                     Collections.reverse(Setting.imageList);
+                    Collections.reverse(Setting.imageListFilter);
                     if (statusAudio && statusVideo) {
                         loadView.hide();
                         continueBtn.setVisibility(View.VISIBLE);

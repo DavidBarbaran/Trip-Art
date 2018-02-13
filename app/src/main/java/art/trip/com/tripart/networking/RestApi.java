@@ -1,6 +1,7 @@
 package art.trip.com.tripart.networking;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 
 
@@ -44,6 +45,9 @@ public interface RestApi {
 
     @GET("/image.json?")
     Call<JsonObject> getImageById(@Query("orderBy") String order, @Query("equalTo") int lengthLast);
+
+    @GET("/image.json?")
+    Call<JsonObject> getImageByName(@Query("orderBy") String order, @Query("startAt") String startAt, @Query("endAt") String endAt, @Query("limitToLast") int lengthLast);
 
     @GET("/audio.json?")
     Call<List<Audio>> getAudio();
