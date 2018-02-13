@@ -6,32 +6,41 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/image_splash"
-            android:layout_width="@dimen/size36"
-            android:layout_height="@dimen/size36"
-            android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/spacing16"
-            app:srcCompat="@drawable/ic_icon" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/colorPrimary"
+                android:gravity="center">
 
-        <art.trip.com.tripart.widget.FontText
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-           android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/spacing10"
-            android:text="Trip Art"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text36"
-            android:layout_marginBottom="@dimen/spacing4"
-            app:typeface="sun_valley.ttf" />
+                <ImageView
+                    android:id="@+id/image_splash"
+                    android:layout_width="@dimen/size36"
+                    android:layout_height="@dimen/size36"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/ic_icon" />
+
+                <art.trip.com.tripart.widget.FontText
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/spacing4"
+                    android:layout_marginLeft="@dimen/spacing10"
+                    android:text="Trip Art"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text36"
+                    app:typeface="sun_valley.ttf" />
+
+            </LinearLayout>
+        <View
+            android:id="@+id/toolbar_shadow"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:background="@drawable/shadow_toolbar" />
 
     </LinearLayout>
+
 </android.support.constraint.ConstraintLayout>

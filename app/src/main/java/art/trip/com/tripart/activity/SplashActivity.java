@@ -63,7 +63,7 @@ public class SplashActivity extends AppCompatActivity {
         statusAudio = false;
         statusVideo = false;
 
-        restApi.getImage(Setting.ID, Setting.LENGTH_20).enqueue(new Callback<JsonObject>() {
+        restApi.getImage(Setting.ID, Setting.LENGTH_10).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (response.isSuccessful()) {
@@ -111,7 +111,7 @@ public class SplashActivity extends AppCompatActivity {
             }
         });
 */
-        restApi.getAudio(Setting.ID, Setting.LENGTH_20).enqueue(new Callback<JsonObject>() {
+        restApi.getAudio(Setting.ID, Setting.LENGTH_10).enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (response.isSuccessful()) {

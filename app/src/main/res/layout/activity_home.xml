@@ -6,6 +6,20 @@
     android:layout_height="match_parent"
     tools:context="art.trip.com.tripart.activity.HomeActivity">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/home_recycler"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingBottom="72dp"
+        android:background="@color/black"
+        android:paddingTop="?attr/actionBarSize"
+        android:overScrollMode="never"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <include
         android:id="@+id/custom_toolbar"
         layout="@layout/custom_app_bar"
@@ -15,17 +29,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/home_recycler"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:clipToPadding="false"
-        android:paddingBottom="@dimen/spacing16"
-        android:background="@color/black"
-        android:overScrollMode="never"
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:itemBackground="?android:attr/windowBackground"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/custom_toolbar" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:menu="@menu/navigation" />
 
 </android.support.constraint.ConstraintLayout>

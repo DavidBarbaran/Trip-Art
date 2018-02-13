@@ -28,9 +28,9 @@ public class Setting {
     public static List<Video> videoList;
     public static final String VIDEO = "video";
 
-    public static final String TRANSITION = "transition_image";
     public static final String ID = "\"id\"";
     public static final String TITLE = "\"title\"";
+    public static final int LENGTH_10 = 10;
     public static final int LENGTH_20 = 20;
 
     public static final int DURATION_ANIMATION = 400;
