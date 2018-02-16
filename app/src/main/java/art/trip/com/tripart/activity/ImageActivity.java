@@ -1,6 +1,7 @@
 package art.trip.com.tripart.activity;
 
 import android.content.Context;
+import android.location.SettingInjectorService;
 import android.os.Build;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +34,7 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -101,11 +103,13 @@ public class ImageActivity extends AppCompatActivity {
     }
 
     private void initRecycler() {
+        Setting.imageListFilter.clear();
+        Setting.imageListFilter = new ArrayList<>();
+        Setting.imageListFilter.addAll(Setting.imageList);
         layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         imageRecycler.setLayoutManager(layoutManager);
         imageAdapter = new ImageAdapter(Setting.imageListFilter, this, ImageAdapter.TYPE_2);
         imageRecycler.setAdapter(imageAdapter);
-
         imageRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
